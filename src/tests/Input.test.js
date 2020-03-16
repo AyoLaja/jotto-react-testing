@@ -1,27 +1,37 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 
-import { findByTestAttr } from '../../test/testUtils'
+import { findByTestAttr, storeFactory } from '../../test/testUtils'
 import Input from '../components/Input'
 
 const setup = (initialState = {}) => {
-  const wrapper = shallow(<Input />)
-  console.log(wrapper.debug())
+  const store = storeFactory(initialState)
+  const wrapper = shallow(<Input store={store}/>).dive().dive()
+  return wrapper
 }
-setup()
 
 describe('renders correctly', () => {
   describe('word has not been guessed', () => {
-    it('renders component without error', () => {
+    let wrapper;
 
+    beforeEach(() => {
+      const initialState = { success: false }
+      wrapper = setup(initialState)
+    })
+
+    it('renders component without error', () => {
+      const inputComponent = findByTestAttr(wrapper, 'input-component')
+      expect(inputComponent.length).toBe(1)
     })
 
     it('renders input box', () => {
-
+      const inputBox = findByTestAttr(wrapper, 'input-box')
+      expect(inputBox.length).toBe(1)
     })
 
     it('renders submit button', () => {
-
+      const submitButton = findByTestAttr(wrapper, 'submit-button')
+      expect(submitButton.length).toBe(1)
     })
   })
 
